@@ -1,0 +1,2 @@
+class dataAdapter():
+    pass 

@@ -1,11 +1,18 @@
-from router import Router
+from router import Router, render_template
 
 app = Router(__name__)
 
 @app.route('/', ['GET'])
-def hello(request):
-    # localhost:8000/?name=<yourname>
-    return f"hello {request.qs['name'][0]}"
+def index(request):\
+    return render_template("index.html")
 
+@app.route('/login', ['GET'])
+def login(request):
+    context = {
+        "name": "John"
+    }
+    return render_template("login.html", **context)
+
+    
 if __name__ == "__main__":
     app.run()
