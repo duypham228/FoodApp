@@ -86,11 +86,15 @@ dataAdapter = dataAdapter("food.db")
 # dataAdapter.saveFood(Food(None, "Big Mac", 1, 3.99, "Most popular burger"))
 
 
-# address = dataAdapter.getAddress(1)
-# user = dataAdapter.getUser(1)
-# restaurant = dataAdapter.getRestaurant(1)
-# food = dataAdapter.getFood(1)
-# print(food)
+address = dataAdapter.getAddress(1)
+user = dataAdapter.getUser(1)
+restaurant = dataAdapter.getRestaurant(1)
+food = dataAdapter.getFood(1)
+
+print(address)
+print(user)
+print(restaurant)
+print(food)
 
 
 dataAdapter.close()
