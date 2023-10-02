@@ -106,7 +106,6 @@ class User():
     def get_user_type(self):
         return self.user_type
     
-
 class Restaurant():
     def __init__(self, restaurant_id, name, address_id, phone_number, email, description):
         self.restaurant_id = restaurant_id
@@ -161,4 +160,169 @@ class Restaurant():
     
     def get_description(self):
         return self.description
+
+class Food():
+    def __init__(self, food_id, name, restaurant_id, price, description):
+        self.food_id = food_id
+        self.name = name
+        self.restaurant_id = restaurant_id
+        self.price = price
+        self.description = description
+
+    def __str__(self):
+        return f"{self.food_id}, {self.name}, {self.restaurant_id}, {self.price}, {self.description}"
+
+    def __repr__(self):
+        return f"{self.food_id}, {self.name}, {self.restaurant_id}, {self.price}, {self.description}"
+    
+    # setters
+    def set_food_id(self, food_id):
+        self.food_id = food_id
+
+    def set_name(self, name):
+        self.name = name
+
+    def set_restaurant_id(self, restaurant_id):
+        self.restaurant_id = restaurant_id
+
+    def set_price(self, price):
+        self.price = price
+    
+    def set_description(self, description):
+        self.description = description
+
+    
+    # getters
+    def get_food_id(self):
+        return self.food_id
+    
+    def get_name(self):
+        return self.name
+    
+    def get_restaurant_id(self):
+        return self.restaurant_id
+    
+    def get_price(self):
+        return self.price
+    
+    def get_description(self):
+        return self.description
+    
+class Order():
+    def __init__(self, order_id, order_date, customer_id, restaurant_id, deliver_id, total_cost, credit_card_id, status):
+        self.order_list = None
+        self.order_id = order_id
+        self.order_date = order_date
+        self.customer_id = customer_id
+        self.restaurant_id = restaurant_id
+        self.deliver_id = deliver_id
+        self.total_cost = total_cost
+        self.credit_card_id = credit_card_id
+        self.status = status
+    
+
+    def __str__(self):
+        return f"{self.order_id}, {self.order_date}, {self.customer_id}, {self.restaurant_id}, {self.deliver_id}, {self.total_cost}, {self.credit_card_id}, {self.status}"
+    
+    def __repr__(self):
+        return f"{self.order_id}, {self.order_date}, {self.customer_id}, {self.restaurant_id}, {self.deliver_id}, {self.total_cost}, {self.credit_card_id}, {self.status}"
+    
+    # setters
+    def set_order_id(self, order_id):
+        self.order_id = order_id
+    
+    def set_order_date(self, order_date):
+        self.order_date = order_date
+
+    def set_customer_id(self, customer_id):
+        self.customer_id = customer_id
+    
+    def set_restaurant_id(self, restaurant_id):
+        self.restaurant_id = restaurant_id
+
+    def set_deliver_id(self, deliver_id):    
+        self.deliver_id = deliver_id
+    
+    def set_total_cost(self, total_cost):
+        self.total_cost = total_cost
+
+    def set_credit_card_id(self, credit_card_id):
+        self.credit_card_id = credit_card_id
+    
+    def set_status(self, status):
+        self.status = status
+    
+    # getters
+    def get_order_id(self):
+        return self.order_id
+    
+    def get_order_date(self):
+        return self.order_date
+    
+    def get_customer_id(self):
+        return self.customer_id
+    
+    def get_restaurant_id(self):
+        return self.restaurant_id
+    
+    def get_deliver_id(self):
+        return self.deliver_id
+    
+    def get_total_cost(self):
+        return self.total_cost
+    
+    def get_credit_card_id(self):
+        return self.credit_card_id
+    
+    def get_status(self):
+        return self.status
+
+    def get_order_list(self):
+        return self.order_list
+
+class OrderLine():
+    def __init__(self, order_line_id, order_id, food_id, quantity, price):
+        self.order_line_id = order_line_id
+        self.order_id = order_id
+        self.food_id = food_id
+        self.quantity = quantity
+        self.price = price
+    
+    def __str__(self):
+        return f"{self.order_line_id}, {self.order_id}, {self.food_id}, {self.quantity}, {self.price}"
+    
+    def __repr__(self):
+        return f"{self.order_line_id}, {self.order_id}, {self.food_id}, {self.quantity}, {self.price}"
+    
+    # setters
+    def set_order_line_id(self, order_line_id):
+        self.order_line_id = order_line_id
+    
+    def set_order_id(self, order_id):
+        self.order_id = order_id
+    
+    def set_food_id(self, food_id):
+        self.food_id = food_id
+    
+    def set_quantity(self, quantity):
+        self.quantity = quantity
+    
+    def set_price(self, price):
+        self.price = price
+    
+    # getters
+    def get_order_line_id(self):
+        return self.order_line_id
+    
+    def get_order_id(self):
+        return self.order_id
+    
+    def get_food_id(self):
+        return self.food_id
+    
+    def get_quantity(self):
+        return self.quantity
+    
+    def get_price(self):
+        return self.price
     
