@@ -19,7 +19,9 @@ class dataAdapter():
     def getAddress(self, address_id):
         self.cursor.execute("SELECT * FROM addresses WHERE address_id=?", (address_id,))
         row = self.cursor.fetchone()
-        return Address(row[0], row[1], row[2], row[3], row[4])
+        if row:
+            return Address(row[0], row[1], row[2], row[3], row[4])
+        return None
     
     def deleteAddress(self, address_id):
         self.cursor.execute("DELETE FROM addresses WHERE address_id=?", (address_id,))
@@ -32,7 +34,16 @@ class dataAdapter():
     def getUser(self, user_id):
         self.cursor.execute("SELECT * FROM users WHERE user_id=?", (user_id,))
         row = self.cursor.fetchone()
-        return User(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
+        if row:
+            return User(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
+        return None
+    
+    def getUserByUsername(self, username):
+        self.cursor.execute("SELECT * FROM users WHERE username=?", (username,))
+        row = self.cursor.fetchone()
+        if row:
+            return User(row[0], row[1], row[2], row[3], row[4], row[5], row[6])
+        return None
     
     def deleteUser(self, user_id):
         self.cursor.execute("DELETE FROM users WHERE user_id=?", (user_id,))
@@ -45,7 +56,9 @@ class dataAdapter():
     def getRestaurant(self, restaurant_id):
         self.cursor.execute("SELECT * FROM restaurants WHERE restaurant_id=?", (restaurant_id,))
         row = self.cursor.fetchone()
-        return Restaurant(row[0], row[1], row[2], row[3], row[4], row[5])
+        if row:
+            return Restaurant(row[0], row[1], row[2], row[3], row[4], row[5])
+        return None
     
     def deleteRestaurant(self, restaurant_id):
         self.cursor.execute("DELETE FROM restaurants WHERE restaurant_id=?", (restaurant_id,))
@@ -58,7 +71,9 @@ class dataAdapter():
     def getFood(self, food_id):
         self.cursor.execute("SELECT * FROM foods WHERE food_id=?", (food_id,))
         row = self.cursor.fetchone()
-        return Food(row[0], row[1], row[2], row[3], row[4])
+        if row:
+            return Food(row[0], row[1], row[2], row[3], row[4])
+        return None
     
     def deleteFood(self, food_id):
         self.cursor.execute("DELETE FROM foods WHERE food_id=?", (food_id,))
@@ -76,25 +91,25 @@ class dataAdapter():
 
 # TESTING DATA ADAPTER
 
-dataAdapter = dataAdapter("food.db")
+# dataAdapter = dataAdapter("food.db")
 
-# dataAdapter.saveAddress(Address(None, "123 Main St", "New York", "NY", "10001"))
-# dataAdapter.saveUser(User(None, "johndoe", "password", "John", "Doe", "johndoe@gmail.com", "customer"))
-# dataAdapter.saveUser(User(None, "bobbytables", "password", "Bobby", "Tables", "", "owner"))
-# dataAdapter.saveUser(User(None, "davidsmith", "password", "David", "Smith", "", "deliver"))
-# dataAdapter.saveRestaurant(Restaurant(None, "McDonalds", 1, "123-456-7890", "", "Fast Food"))
-# dataAdapter.saveFood(Food(None, "Big Mac", 1, 3.99, "Most popular burger"))
-
-
-address = dataAdapter.getAddress(1)
-user = dataAdapter.getUser(1)
-restaurant = dataAdapter.getRestaurant(1)
-food = dataAdapter.getFood(1)
-
-print(address)
-print(user)
-print(restaurant)
-print(food)
+# # dataAdapter.saveAddress(Address(None, "123 Main St", "New York", "NY", "10001"))
+# # dataAdapter.saveUser(User(None, "johndoe", "password", "John", "Doe", "johndoe@gmail.com", "customer"))
+# # dataAdapter.saveUser(User(None, "bobbytables", "password", "Bobby", "Tables", "", "owner"))
+# # dataAdapter.saveUser(User(None, "davidsmith", "password", "David", "Smith", "", "deliver"))
+# # dataAdapter.saveRestaurant(Restaurant(None, "McDonalds", 1, "123-456-7890", "", "Fast Food"))
+# # dataAdapter.saveFood(Food(None, "Big Mac", 1, 3.99, "Most popular burger"))
 
 
-dataAdapter.close()
+# address = dataAdapter.getAddress(1)
+# user = dataAdapter.getUser(1)
+# restaurant = dataAdapter.getRestaurant(1)
+# food = dataAdapter.getFood(1)
+
+# print(address)
+# print(user)
+# print(restaurant)
+# print(food)
+
+
+# dataAdapter.close()

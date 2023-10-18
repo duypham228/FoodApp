@@ -326,3 +326,49 @@ class OrderLine():
     def get_price(self):
         return self.price
     
+class CreditCard():
+    def __init__(self, credit_card_id, card_number, holder_name, expiration_date, CVV):
+        self.credit_card_id = credit_card_id
+        self.card_number = card_number
+        self.holder_name = holder_name
+        self.expiration_date = expiration_date
+        self.CVV = CVV
+    
+    def __str__(self):
+        return f"{self.credit_card_id}, {self.card_number}, {self.holder_name}, {self.expiration_date}, {self.CVV}"
+    
+    def __repr__(self):
+        return f"{self.credit_card_id}, {self.card_number}, {self.holder_name}, {self.expiration_date}, {self.CVV}"
+    
+    # setters
+    def set_credit_card_id(self, credit_card_id):
+        self.credit_card_id = credit_card_id
+
+    def set_card_numbner(self, card_number):
+        self.card_number = card_number
+    
+    def set_holder_name(self, holder_name):
+        self.holder_name = holder_name
+    
+    def set_expiration_date(self, expiration_date):
+        self.expiration_date = expiration_date
+    
+    def set_CVV(self, CVV):
+        self.CVV = CVV
+
+    # getters
+    def get_credit_card_id(self):
+        return self.credit_card_id
+    
+    def get_card_number(self):
+        return self.card_number
+    
+    def get_holder_name(self):
+        return self.holder_name
+    
+    def get_expiration_date(self):
+        return self.expiration_date
+    
+    def get_CVV(self):
+        return self.CVV
+    
