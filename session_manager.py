@@ -1,12 +1,21 @@
 import uuid
 import time
+from http.cookies import SimpleCookie
 
 sessions = {}
 
 def create_session(username):
     session_id = str(uuid.uuid4())
     sessions[session_id] = {'username': username, 'timestamp': time.time()}
-    return session_id
+    
+    # Create a SimpleCookie for the session ID
+    session_cookie = SimpleCookie()
+    session_cookie['session_id'] = session_id
+    session_cookie['session_id']['path'] = '/'
+    session_cookie['session_id']['expires'] = 1800  # Set the expiration time (e.g., 30 minutes)
+
+    # Return the session ID as a cookie string
+    return session_cookie
 
 def is_valid_session(session_id):
     if session_id in sessions:

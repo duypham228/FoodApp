@@ -1,5 +1,5 @@
 import session_manager
-
+from functools import wraps
 
 class test():
     def __init__(self, session_manager):
