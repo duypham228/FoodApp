@@ -45,7 +45,7 @@ class Address():
         return self.zip
 
 class User():
-    def __init__(self, user_id ,username, password, first_name, last_name, email, user_type):
+    def __init__(self, user_id=None ,username=None, password=None, first_name=None, last_name=None, email=None, user_type=None):
         self.user_id = user_id
         self.username = username
         self.password = password
@@ -107,7 +107,7 @@ class User():
         return self.user_type
     
 class Restaurant():
-    def __init__(self, restaurant_id, name, address_id, phone_number, email, description):
+    def __init__(self, restaurant_id=None, name=None, address_id=None, phone_number=None, email=None, description=None):
         self.restaurant_id = restaurant_id
         self.name = name
         self.address_id = address_id
@@ -209,14 +209,14 @@ class Food():
         return self.description
     
 class Order():
-    def __init__(self, order_id, order_date, customer_id, restaurant_id, deliver_id, total_cost, credit_card_id, status):
-        self.order_list = None
+    def __init__(self, order_id=None, order_date=None, customer_id=None, restaurant_id=None, total_cost=None, deliver_id=None, credit_card_id=None, status=None):
+        self.order_list = []
         self.order_id = order_id
         self.order_date = order_date
         self.customer_id = customer_id
         self.restaurant_id = restaurant_id
-        self.deliver_id = deliver_id
         self.total_cost = total_cost
+        self.deliver_id = deliver_id
         self.credit_card_id = credit_card_id
         self.status = status
     
@@ -281,18 +281,19 @@ class Order():
         return self.order_list
 
 class OrderLine():
-    def __init__(self, order_line_id, order_id, food_id, quantity, price):
+    def __init__(self, order_line_id=None, order_id=None, food_id=None, food_name=None, quantity=None, price=None):
         self.order_line_id = order_line_id
         self.order_id = order_id
         self.food_id = food_id
+        self.food_name = food_name
         self.quantity = quantity
         self.price = price
     
     def __str__(self):
-        return f"{self.order_line_id}, {self.order_id}, {self.food_id}, {self.quantity}, {self.price}"
+        return f"{self.order_line_id}, {self.order_id}, {self.food_id}, {self.fodd_name}, {self.quantity}, {self.price}"
     
     def __repr__(self):
-        return f"{self.order_line_id}, {self.order_id}, {self.food_id}, {self.quantity}, {self.price}"
+        return f"{self.order_line_id}, {self.order_id}, {self.food_id}, {self.food_name}, {self.quantity}, {self.price}"
     
     # setters
     def set_order_line_id(self, order_line_id):

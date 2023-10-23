@@ -110,3 +110,4 @@ class Router:
 
     def get_handler(self, request):
         return self.handler_class(request)
+    
