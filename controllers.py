@@ -86,6 +86,7 @@ class customerController:
         address_id = db.saveAddress(address)
         shipping_id = db.saveShipping(self.user.user_id, address_id)
         db.close()
+        return address_id
 
     def addPayment(self):
         card_number = input("Please enter your card number: ")
@@ -97,6 +98,7 @@ class customerController:
         credit_card_id = db.saveCreditCard(credit_card)
         payment_id = db.savePayment(self.user.user_id, credit_card_id)
         db.close()
+        return credit_card_id
 
         
 
@@ -111,6 +113,10 @@ class customerController:
         for order_line in self.order.order_list:
             self.order.total_cost += order_line.price
         self.order.status = "pending"
+        address_id = self.addAddress()
+        credit_card_id = self.addPayment()
+        # self.order.address_id = address_id
+        self.order.credit_card_id = credit_card_id
 
         # Remember to update status of order after delivery
         order_id = db.saveOrder(self.order)

@@ -69,9 +69,9 @@ class dataAdapter():
         self.conn.commit()
         return credit_card_id
 
-    def savePayment(self, customer_id, credit_card_id):
-        self.cursor.execute("INSERT INTO payments (customer_id, credit_card_id) VALUES (?,?)",
-                            (customer_id, credit_card_id))
+    def savePayment(self, user_id, credit_card_id):
+        self.cursor.execute("INSERT INTO payments (user_id, credit_card_id) VALUES (?,?)",
+                            (user_id, credit_card_id))
         payment_id = self.cursor.lastrowid
         self.conn.commit()
         return payment_id
