@@ -12,7 +12,7 @@ def create_session(username):
     session_cookie = SimpleCookie()
     session_cookie['session_id'] = session_id
     session_cookie['session_id']['path'] = '/'
-    session_cookie['session_id']['expires'] = 1800  # Set the expiration time (e.g., 30 minutes)
+    session_cookie['session_id']['expires'] = 7200  # Set the expiration time (e.g., 30 minutes)
 
     # Return the session ID as a cookie string
     return session_cookie
@@ -21,7 +21,7 @@ def is_valid_session(session_id):
     if session_id in sessions:
         session = sessions[session_id]
         # Check session expiration (e.g., 30 minutes)
-        if time.time() - session['timestamp'] < 1800:
+        if time.time() - session['timestamp'] < 7200:
             session['timestamp'] = time.time()
             return True
         else:

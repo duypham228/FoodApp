@@ -1,52 +1,43 @@
-import session_manager
-from functools import wraps
-import json
+from controllers import *
+from models import *
+from dataAdapter import dataAdapter
 
-# class test():
-#     def __init__(self, session_manager):
-#         self.session_manager = session_manager
 
-#     def print(self):
-#         print(session_manager.sessions)
-    
-#     def create_session(self, username):
-#         session_manager.create_session(username)
-    
+dataAdapter = dataAdapter("database/food.db")
 
-# test1 = test(session_manager)
-# test2 = test(session_manager)
+user = accountController.login("duyphamo", "123")
 
-# test1.create_session("test1")
-# test2.create_session("test2")
+ownerController.setUser(user)
 
-# test1.print()
-# dict1 = {"a": "b", "c": "d", "e": ""}
-# if dict1["e"] is not None:
-#     print("True")
-# else:
-#     print("False")
-def get_value_from_yaml(yaml_content, key):
-    lines = yaml_content.splitlines()
-    value = None
-    key_found = False
+# restaurants = ownerController.getRestaurants()
 
-    for line in lines:
-        if key in line:
-            key_found = True
-        elif key_found:
-            value = line.strip()
-            break
+# restaurants = dataAdapter.getAllRestaurants()
 
-    return value
+# addr = Address(None, "111 Maple St", "Boston", "MA", "02115")
 
-# Read the YAML content from your config file
-with open("config.yml", "r") as config_file:
-    yaml_content = config_file.read()
+# addr_id = dataAdapter.saveAddress(addr)
 
-# Specify the key you want to extract (e.g., "tamubatch_path")
-key = "tamubatch_path"
+# print(addr_id)
 
-# Get the value associated with the key in the specified environment (e.g., "production")
-tamubatch_path = get_value_from_yaml(yaml_content, f"{key}:")
+# res = Restaurant(None, "Burger King", addr_id, "1236543443", "", "Best Burger in Town")
 
-print(f"{key}: {tamubatch_path}")
+# res_id = dataAdapter.saveRestaurant(res)
+
+# print(res_id)
+
+# restaurants = dataAdapter.getAllRestaurants()
+
+# # print(restaurants)
+
+# for restaurant in restaurants:
+#     print(restaurant.name)
+
+# restaurant = dataAdapter.getRestaurant(2)
+# print(restaurant.restaurant_id)
+# ownerController.addRestaurant(restaurant)
+
+restaurants = ownerController.getRestaurants()
+print(restaurants)
+
+
+

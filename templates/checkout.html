@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Checkout</title>
+  </head>
+  <body>
+    <h1>Checkout</h1>
+    <form action="/checkout" method="POST">
+      <h2>Review Order</h2>
+      {order}
+      <h2>Payment Information</h2>
+      {payment}
+      <h2>Address Information</h2>
+      {address}
+      <input type="hidden" name="restaurant_id" value="{restaurant_id}" />
+      <input type="submit" value="Checkout" />
+    </form>
+  </body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Add Food</title>
+  </head>
+  <body>
+    <h1>Add New Food</h1>
+    <h2>Food Information</h2>
+    <form action="/addFood" method="POST">
+      <label for="name">Food Name</label>
+      <input type="text" name="name" id="name"/>
+			<br>
+      <label for="price">Price</label>
+      <input type="number" step="any" name="price" id="price" />
+			<br>
+      <label for="description">Description</label>
+      <input type="text" name="description" id="description" />
+			<br>
+      <input type="hidden" name="id" id="id" value={id} />
+      <input type="submit" value="Add New Food"/>
+  </body>
+</html>

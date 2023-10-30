@@ -31,12 +31,29 @@ class dataAdapter():
             "DELETE FROM addresses WHERE address_id=?", (address_id,))
         self.conn.commit()
 
+
     def saveShipping(self, customer_id, address_id):
         self.cursor.execute("INSERT INTO shipping (customer_id, address_id) VALUES (?,?)",
                             (customer_id, address_id))
         shipping_id = self.cursor.lastrowid
         self.conn.commit()
         return shipping_id
+    
+    def getShippingAddresses(self, customer_id):
+        self.cursor.execute("SELECT * FROM addresses WHERE address_id IN (SELECT address_id FROM shipping WHERE customer_id=?)", (customer_id,))
+        rows = self.cursor.fetchall()
+        addresses = []
+        for row in rows:
+            addresses.append(Address(row[0], row[1], row[2], row[3], row[4]))
+        return addresses
+    
+    def getPaymentCards(self, customer_id):
+        self.cursor.execute("SELECT * FROM creditcards WHERE credit_card_id IN (SELECT credit_card_id FROM payments WHERE user_id=?)", (customer_id,))
+        rows = self.cursor.fetchall()
+        cards = []
+        for row in rows:
+            cards.append(CreditCard(row[0], row[1], row[2], row[3], row[4]))
+        return cards
 
     def saveUser(self, user):
         self.cursor.execute("INSERT INTO users (user_id, username, password, first_name, last_name, email, user_type) VALUES (?,?,?,?,?,?,?)",
@@ -62,6 +79,11 @@ class dataAdapter():
         self.cursor.execute("DELETE FROM users WHERE user_id=?", (user_id,))
         self.conn.commit()
 
+    def saveOwnership(self, user_id, restaurant_id):
+        self.cursor.execute("INSERT INTO ownerships (owner_id, restaurant_id) VALUES (?,?)",
+                            (user_id, restaurant_id))
+        self.conn.commit()
+
     def saveCreditCard(self, credit_card):
         self.cursor.execute("INSERT INTO creditcards (card_number, holder_name, expiration_date, CVV) VALUES (?,?,?,?)",
                             (credit_card.card_number, credit_card.holder_name, credit_card.expiration_date, credit_card.CVV))
@@ -79,7 +101,19 @@ class dataAdapter():
     def saveRestaurant(self, restaurant):
         self.cursor.execute("INSERT INTO restaurants (restaurant_id, name, address_id, phone_number, email, description) VALUES (?,?,?,?,?,?)", (
             restaurant.restaurant_id, restaurant.name, restaurant.address_id, restaurant.phone_number, restaurant.email, restaurant.description))
+        restaurant_id = self.cursor.lastrowid
         self.conn.commit()
+        return restaurant_id
+
+    def getRestaurantsByOwner(self, owner_id):
+        self.cursor.execute(
+            "SELECT * FROM restaurants WHERE restaurant_id IN (SELECT restaurant_id FROM ownerships WHERE owner_id=?)", (owner_id,))
+        rows = self.cursor.fetchall()
+        restaurants = []
+        for row in rows:
+            restaurants.append(Restaurant(
+                row[0], row[1], row[2], row[3], row[4], row[5]))
+        return restaurants
 
     def getRestaurant(self, restaurant_id):
         self.cursor.execute(
@@ -135,13 +169,13 @@ class dataAdapter():
         return foods
 
     def saveOrder(self, order):
-        order_list = order.get_order_list()
+        order_list = order.order_list
         self.cursor.execute("INSERT INTO orders (order_date, customer_id, restaurant_id, deliver_id, total_cost, status) VALUES (?,?,?,?,?,?)",
                             (order.order_date, order.customer_id, order.restaurant_id, order.deliver_id, order.total_cost, order.status))
         order_id = self.cursor.lastrowid
         for order_line in order_list:
-            self.cursor.execute("INSERT INTO OrderLines (order_id, food_id, quantity, price) VALUES (?,?,?,?)", (
-                order_id, order_line.food_id, order_line.quantity, order_line.price))
+            self.cursor.execute("INSERT INTO OrderLines (order_id, food_id, food_name, quantity, price) VALUES (?,?,?,?,?)", (
+                order_id, order_line.food_id, order_line.food_name, order_line.quantity, order_line.price))
         
         self.conn.commit()
         return order_id
@@ -156,7 +190,15 @@ class dataAdapter():
         self.cursor.execute("SELECT * FROM orders WHERE order_id=?", (order_id,))
         row = self.cursor.fetchone()
         if row:
-            return Order(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7])
+            order = Order(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7])
+            self.cursor.execute("SELECT * FROM OrderLines WHERE order_id=?", (order_id,))
+            rows = self.cursor.fetchall()
+            order_list = []
+            for row in rows:
+                print(row)
+                order_list.append(OrderLine(row[0], row[1], row[2], row[3], row[4], row[5]))
+            order.order_list = order_list
+            return order
         return None
     
     def getPendingOrdersByRestaurant(self, restaurant_id):
@@ -191,6 +233,14 @@ class dataAdapter():
             orders.append(Order(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]))
         return orders
     
+    def getDeliveringOrdersByDeliver(self, deliver_id):
+        self.cursor.execute("SELECT * FROM orders WHERE deliver_id=? AND status='delivering'", (deliver_id,))
+        rows = self.cursor.fetchall()
+        orders = []
+        for row in rows:
+            orders.append(Order(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]))
+        return orders
+
     def getDeliveredOrdersByDeliver(self, deliver_id):
         self.cursor.execute("SELECT * FROM orders WHERE deliver_id=? AND status='delivered'", (deliver_id,))
         rows = self.cursor.fetchall()

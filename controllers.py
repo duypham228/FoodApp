@@ -2,232 +2,309 @@ from dataAdapter import dataAdapter
 from models import Order, OrderLine, Food, Restaurant, User, Address, CreditCard
 from datetime import datetime
 
-database_path = "database/food-clone.db"
+database_path = "database/food.db"
 
 class accountController:
-    def __init__(self):
-        pass
-    
-    def register(self, username, password, first_name, last_name, email, user_type):
+    # def __init__(cls):
+    #     pass
+    @classmethod
+    def register(cls, username, password, first_name, last_name, email, user_type):
         db = dataAdapter(database_path)
         user = User(None, username, password, first_name, last_name, email, user_type)
         db.saveUser(user)
         db.close()
-    
-    def login(self, username, password):
+    @classmethod
+    def login(cls, username, password):
         db = dataAdapter(database_path)
         user = db.getUserByUsername(username)
         db.close()
         if user is not None and user.password == password:
-            return True
-        return False
+            return user
+        return None
+    
+    @classmethod
+    def getUserByUsername(cls, username):
+        db = dataAdapter(database_path)
+        user = db.getUserByUsername(username)
+        db.close()
+        return user
     
 
 class customerController:
-    def __init__(self):
-        self.user = User()
-        self.order = Order()
-        self.current_restaurant_id = None
+    # def __init__(cls):
+    user = User()
+    order = Order()
+    restaurant = Restaurant()
 
     # Assume Login is successful
-    def setUser(self):
-        db = dataAdapter(database_path)
-        self.user = db.getUser(1)
+    @classmethod
+    def setUser(cls, current_user):
+        cls.user = current_user
 
-    def getRestaurants(self):
+    @classmethod
+    def getRestaurants(cls):
         db = dataAdapter(database_path)
         restaurants = db.getAllRestaurants()
         db.close()
         return restaurants
-
-    def getRestaurant(self, restaurant_id):
+    
+    @classmethod
+    def getRestaurant(cls, restaurant_id):
         db = dataAdapter(database_path)
         restaurant = db.getRestaurant(restaurant_id)
         db.close()
         return restaurant
     
-    def pickRestaurant(self, restaurant_id):
-        self.current_restaurant_id = restaurant_id
+    @classmethod
+    def pickRestaurant(cls, restaurant_id):
+        db = dataAdapter(database_path)
+        cls.restaurant = db.getRestaurant(restaurant_id)
+        db.close()
 
-    def getFoodsByRestaurant(self, restaurant_id):
+    @classmethod
+    def getFoodsByRestaurant(cls, restaurant_id):
         db = dataAdapter(database_path)
         foods = db.getFoodByRestaurant(restaurant_id)
         db.close()
         return foods
 
-    def getFood(self, food_id):
+    @classmethod
+    def getFood(cls, food_id):
         db = dataAdapter(database_path)
         food = db.getFood(food_id)
         db.close()
         return food
-    
-    def addToCart(self, food_id, quantity):
+
+    @classmethod
+    def addToCart(cls, food_id, quantity):
         db = dataAdapter(database_path)
-        food = self.getFood(food_id)
-        order_line = OrderLine(None, self.order.order_id, food_id, food.name, quantity, food.price * quantity)
-        self.order.order_list.append(order_line)
+        food = cls.getFood(food_id)
+        order_line = OrderLine(None, cls.order.order_id, food_id, food.name, quantity, food.price * quantity)
+        cls.order.order_list.append(order_line)
     
-    def removeFromCart(self, food_id):
-        for order_line in self.cart:
+    @classmethod
+    def removeFromCart(cls, food_id):
+        for order_line in cls.cart:
             if order_line.food_id == food_id:
-                self.cart.remove(order_line)
+                cls.cart.remove(order_line)
     
-    def showCart(self):
-        for order_line in self.order.order_list:
+    @classmethod
+    def showCart(cls):
+        for order_line in cls.order.order_list:
             print(f"{order_line.food_id}: {order_line.food_name} - {order_line.quantity} - ${order_line.price}")
 
-    def addAddress(self):
-        street = input("Please enter your street: ")
-        city = input("Please enter your city: ")
-        state = input("Please enter your state: ")
-        zip_code = input("Please enter your zip code: ")
+    @classmethod
+    def addAddress(cls, street, city, state, zip_code):
+
         address = Address(None, street, city, state, zip_code)
         db = dataAdapter(database_path)
         address_id = db.saveAddress(address)
-        shipping_id = db.saveShipping(self.user.user_id, address_id)
+        shipping_id = db.saveShipping(cls.user.user_id, address_id)
         db.close()
         return address_id
 
-    def addPayment(self):
-        card_number = input("Please enter your card number: ")
-        card_holder = input("Please enter your card holder: ")
-        expiration_date = input("Please enter your expiration date: ")
-        security_code = input("Please enter your security code: ")
+    @classmethod
+    def addPayment(cls, card_number, card_holder, expiration_date, security_code):
         db = dataAdapter(database_path)
         credit_card = CreditCard(None, card_number, card_holder, expiration_date, security_code)
         credit_card_id = db.saveCreditCard(credit_card)
-        payment_id = db.savePayment(self.user.user_id, credit_card_id)
+        payment_id = db.savePayment(cls.user.user_id, credit_card_id)
         db.close()
         return credit_card_id
-
-        
-
-        
-
-    def checkout(self):
+    
+    @classmethod
+    def getAddresses(cls):
         db = dataAdapter(database_path)
-        self.order.order_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        self.order.customer_id = self.user.user_id
-        self.order.restaurant_id = self.current_restaurant_id
-        self.order.total_cost = 0
-        for order_line in self.order.order_list:
-            self.order.total_cost += order_line.price
-        self.order.status = "pending"
-        address_id = self.addAddress()
-        credit_card_id = self.addPayment()
-        # self.order.address_id = address_id
-        self.order.credit_card_id = credit_card_id
+        addresses = db.getShippingAddresses(cls.user.user_id)
+        db.close()
+        return addresses
+
+    @classmethod
+    def getPayments(cls):
+        db = dataAdapter(database_path)
+        payments = db.getPaymentCards(cls.user.user_id)
+        db.close()
+        return payments
+
+        
+    @classmethod
+    def checkout(cls, address_id, credit_card_id):
+        db = dataAdapter(database_path)
+        cls.order.order_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        cls.order.customer_id = cls.user.user_id
+        cls.order.restaurant_id = cls.restaurant.restaurant_id
+        cls.order.total_cost = 0
+        for order_line in cls.order.order_list:
+            cls.order.total_cost += order_line.price
+        cls.order.status = "pending"
+        # cls.order.address_id = address_id
+        cls.order.credit_card_id = credit_card_id
 
         # Remember to update status of order after delivery
-        order_id = db.saveOrder(self.order)
+        order_id = db.saveOrder(cls.order)
         db.close()
-        self.order.order_id = order_id
-
-        print("Your Total is: ", self.order.total_cost)
-        print("Your Order is Placed!")
-        print("--------------------------")
-        print("Order Summary:")
-        print(f"Order ID: {self.order.order_id}")
-        print(f"Order Date: {self.order.order_date}")
-        print(f"Customer ID: {self.order.customer_id}")
-        print(f"Restaurant ID: {self.order.restaurant_id}")
-        print(f"Total Cost: {self.order.total_cost}")
-        print(f"Status: {self.order.status}")
-        print("--------------------------")
-        print()
-        self.order = Order()
+        cls.order.order_id = order_id
+        cls.order = Order()
 
 class ownerController:
-    def __init__(self):
-        self.user = User()
-        self.restaurant = Restaurant()
+    # def __init__(cls):
+    user = User()
+    restaurant = Restaurant()
 
 
     # Assume Login is successful
-    def setUser(self):
+    @classmethod
+    def setUser(cls, current_user):
         db = dataAdapter(database_path)
-        self.user = db.getUser(2)
+        cls.user = current_user
 
-
-    def setRestaurant(self):
+    @classmethod
+    def setRestaurant(cls, restaurant_id):
         db = dataAdapter(database_path)
-        self.restaurant = db.getRestaurant(1)
-
-
-    def getOrders(self):
-        db = dataAdapter(database_path)
-        orders = db.getOrdersByRestaurant(self.restaurant.restaurant_id)
+        cls.restaurant = db.getRestaurant(restaurant_id)
         db.close()
-        return orders
 
-    def getPendingOrders(self):
+    @classmethod
+    def addRestaurant(cls, name, phone_number, email, description, street, city, state, zipcode):
         db = dataAdapter(database_path)
-        orders = db.getPendingOrdersByRestaurant(self.restaurant.restaurant_id)
+        address = Address(None, street, city, state, zipcode)
+        address_id = db.saveAddress(address)
+        restaurant = Restaurant(None, name, address_id, phone_number, email, description)
+        restaurant_id = db.saveRestaurant(restaurant)
+        db.saveOwnership(cls.user.user_id, restaurant_id)
+        db.close()
+
+    @classmethod
+    def addFood(cls, name, price, description):
+        db = dataAdapter(database_path)
+        food = Food(None, name, cls.restaurant.restaurant_id, price, description)
+        db.saveFood(food)
+        db.close()
+
+
+    @classmethod
+    def getRestaurants(cls):
+        db = dataAdapter(database_path)
+        restaurants = db.getRestaurantsByOwner(cls.user.user_id)
+        db.close()
+        return restaurants
+
+    @classmethod
+    def getOrders(cls):
+        db = dataAdapter(database_path)
+        orders = db.getOrdersByRestaurant(cls.restaurant.restaurant_id)
         db.close()
         return orders
     
-    def getProcessingOrders(self):
+    @classmethod
+    def getOrderById(cls, order_id):
         db = dataAdapter(database_path)
-        orders = db.getProcessingOrdersByRestaurant(self.restaurant.restaurant_id)
+        order = db.getOrder(order_id)
         db.close()
-        return orders
+        return order
 
-    def getReadyOrders(self):
+    @classmethod
+    def getPendingOrders(cls):
         db = dataAdapter(database_path)
-        orders = db.getReadyOrdersByRestaurant(self.restaurant.restaurant_id)
+        orders = db.getPendingOrdersByRestaurant(cls.restaurant.restaurant_id)
         db.close()
         return orders
     
-    def processOrder(self, order_id):
+    @classmethod
+    def getProcessingOrders(cls):
+        db = dataAdapter(database_path)
+        orders = db.getProcessingOrdersByRestaurant(cls.restaurant.restaurant_id)
+        db.close()
+        return orders
+
+    @classmethod
+    def getReadyOrders(cls):
+        db = dataAdapter(database_path)
+        orders = db.getReadyOrdersByRestaurant(cls.restaurant.restaurant_id)
+        db.close()
+        return orders
+    
+    @classmethod
+    def processOrder(cls, order_id):
         db = dataAdapter(database_path)
         order = db.getOrder(order_id)
         order.status = "processing"
         db.updateOrder(order)
         db.close()
     
-    def completeOrder(self, order_id):
+    @classmethod
+    def completeOrder(cls, order_id):
         db = dataAdapter(database_path)
         order = db.getOrder(order_id)
         order.status = "ready"
         db.updateOrder(order)
         db.close()
+
+    @classmethod
+    def getCustomerById(cls, customer_id):
+        db = dataAdapter(database_path)
+        customer = db.getUser(customer_id)
+        db.close()
+        return customer
     
 class deliverController:
-    def __init__(self):
-        self.user = User()
-        self.current_delivering_orders = []
+    # def __init__(cls):
+    user = User()
 
-    def setUser(self):
-        db = dataAdapter(database_path)
-        self.user = db.getUser(3)
-        db.close()
+    @classmethod
+    def setUser(cls, current_user):
+        cls.user = current_user
 
-    def getReadyOrders(self):
+    @classmethod
+    def getReadyOrders(cls):
         db = dataAdapter(database_path)
         orders = db.getReadyOrders()
         db.close()
         return orders
+    
 
-    def pickupOrder(self, order_id):
+    @classmethod
+    def getCustomerById(cls, customer_id):
+        db = dataAdapter(database_path)
+        customer = db.getUser(customer_id)
+        db.close()
+        return customer
+    
+    @classmethod
+    def getOrderById(cls, order_id):
+        db = dataAdapter(database_path)
+        order = db.getOrder(order_id)
+        db.close()
+        return order
+
+    @classmethod
+    def pickupOrder(cls, order_id):
         db = dataAdapter(database_path)
         order = db.getOrder(order_id)
         order.status = "delivering"
-        order.deliver_id = self.user.user_id
-        self.current_delivering_orders.append(order_id)
+        order.deliver_id = cls.user.user_id
         db.updateOrder(order)
         db.close()
 
-    def completeOrder(self, order_id):
+    @classmethod
+    def completeOrder(cls, order_id):
         db = dataAdapter(database_path)
         order = db.getOrder(order_id)
         order.status = "delivered"
         db.updateOrder(order)
         db.close()
-        self.current_delivering_orders.remove(order_id)
-    
-    def getDeliveredOrdersByDeliver(self):
+
+    @classmethod
+    def getDeliveringOrders(cls):
         db = dataAdapter(database_path)
-        orders = db.getDeliveredOrdersByDeliver(self.user.user_id)
+        orders = db.getDeliveringOrdersByDeliver(cls.user.user_id)
+        db.close()
+        return orders
+    
+    @classmethod
+    def getDeliveredOrders(cls):
+        db = dataAdapter(database_path)
+        orders = db.getDeliveredOrdersByDeliver(cls.user.user_id)
         db.close()
         return orders
 
@@ -276,105 +353,105 @@ def showOrdersForDelivery(controller):
 
 
 
-if __name__ == "__main__":
-    # Assume Login is successful
-    print("Welcome to Food Delivery App!")
-    print("Choose one of the following:")
-    print("1. Register")
-    print("2. Login")
-    print("3. Testing User Types")
-    accountController = accountController()
-    choice = input("Please enter your choice: ")
-    if choice == "1":
-        username = input("Please enter your username: ")
-        password = input("Please enter your password: ")
-        first_name = input("Please enter your first name: ")
-        last_name = input("Please enter your last name: ")
-        email = input("Please enter your email: ")
-        user_type = input("Please enter your user type (customer, owner, deliver): ")
-        accountController.register(username, password, first_name, last_name, email, user_type)
-        print("You are registered successfully!")
-    elif choice == "2":
-        username = input("Please enter your username: ")
-        password = input("Please enter your password: ")
-        if accountController.login(username, password):
-            print("You are logged in successfully!")
-        else:
-            print("Login failed!")
-            exit(0)
-    elif choice == "3":
-        print("Login As:")
-        print("1. Customer")
-        print("2. Owner")
-        print("3. Deliver")
-        user_type = input("Please enter the user type: ")
-        if user_type == "1":
-            print("CUSTOMER USE CASE")
-            print("--------------------------")
-            customerController = customerController()
-            customerController.setUser()
-            while (True):
+# if __name__ == "__main__":
+#     # Assume Login is successful
+#     print("Welcome to Food Delivery App!")
+#     print("Choose one of the following:")
+#     print("1. Register")
+#     print("2. Login")
+#     print("3. Testing User Types")
+#     accountController = accountController()
+#     choice = input("Please enter your choice: ")
+#     if choice == "1":
+#         username = input("Please enter your username: ")
+#         password = input("Please enter your password: ")
+#         first_name = input("Please enter your first name: ")
+#         last_name = input("Please enter your last name: ")
+#         email = input("Please enter your email: ")
+#         user_type = input("Please enter your user type (customer, owner, deliver): ")
+#         accountController.register(username, password, first_name, last_name, email, user_type)
+#         print("You are registered successfully!")
+#     elif choice == "2":
+#         username = input("Please enter your username: ")
+#         password = input("Please enter your password: ")
+#         if accountController.login(username, password):
+#             print("You are logged in successfully!")
+#         else:
+#             print("Login failed!")
+#             exit(0)
+#     elif choice == "3":
+#         print("Login As:")
+#         print("1. Customer")
+#         print("2. Owner")
+#         print("3. Deliver")
+#         user_type = input("Please enter the user type: ")
+#         if user_type == "1":
+#             print("CUSTOMER USE CASE")
+#             print("--------------------------")
+#             customerController = customerController()
+#             customerController.setUser()
+#             while (True):
 
                 
-                print("Here are the restaurants:")
-                restaurants = customerController.getRestaurants()
-                for restaurant in restaurants:
-                    print(f"{restaurant.restaurant_id}: {restaurant.name}")
-                restaurant_id = input("Please enter the restaurant ID: ")
-                customerController.pickRestaurant(restaurant_id)
-                restaurant = customerController.getRestaurant(restaurant_id)
-                print(f"{restaurant.name}: {restaurant.description}")
-                foods = customerController.getFoodsByRestaurant(restaurant_id)
-                for food in foods:
-                    print(f"{food.food_id}: {food.name} - ${food.price}")
-                while (input("Do you want to order more? (y/n): ") == "y"):
-                    food_id = input("Please enter the food ID: ")
-                    quantity = int(input("Please enter the quantity: "))
-                    customerController.addToCart(food_id, quantity)
-                    customerController.showCart()
-                input("Press Enter to checkout")
-                customerController.checkout()
-                print("--------------------------")
+#                 print("Here are the restaurants:")
+#                 restaurants = customerController.getRestaurants()
+#                 for restaurant in restaurants:
+#                     print(f"{restaurant.restaurant_id}: {restaurant.name}")
+#                 restaurant_id = input("Please enter the restaurant ID: ")
+#                 customerController.pickRestaurant(restaurant_id)
+#                 restaurant = customerController.getRestaurant(restaurant_id)
+#                 print(f"{restaurant.name}: {restaurant.description}")
+#                 foods = customerController.getFoodsByRestaurant(restaurant_id)
+#                 for food in foods:
+#                     print(f"{food.food_id}: {food.name} - ${food.price}")
+#                 while (input("Do you want to order more? (y/n): ") == "y"):
+#                     food_id = input("Please enter the food ID: ")
+#                     quantity = int(input("Please enter the quantity: "))
+#                     customerController.addToCart(food_id, quantity)
+#                     customerController.showCart()
+#                 input("Press Enter to checkout")
+#                 customerController.checkout()
+#                 print("--------------------------")
 
         
-        elif user_type == "2":
-            print("OWNER USE CASE")
-            print("--------------------------")
-            ownerController = ownerController()
-            ownerController.setUser()
-            ownerController.setRestaurant()
-            while (True):
+#         elif user_type == "2":
+#             print("OWNER USE CASE")
+#             print("--------------------------")
+#             ownerController = ownerController()
+#             ownerController.setUser()
+#             ownerController.setRestaurant()
+#             while (True):
                 
-                showOrdersByRestaurant(ownerController)
+#                 showOrdersByRestaurant(ownerController)
                 
-                # processing the order
-                order_id = input("Please enter the order ID to process: ")
-                ownerController.processOrder(order_id)
-                showOrdersByRestaurant(ownerController)
+#                 # processing the order
+#                 order_id = input("Please enter the order ID to process: ")
+#                 ownerController.processOrder(order_id)
+#                 showOrdersByRestaurant(ownerController)
 
-                # Completing the order
-                order_id = input("Please enter the order ID to mark Ready: ")
-                ownerController.completeOrder(order_id)
-                showOrdersByRestaurant(ownerController)
+#                 # Completing the order
+#                 order_id = input("Please enter the order ID to mark Ready: ")
+#                 ownerController.completeOrder(order_id)
+#                 showOrdersByRestaurant(ownerController)
 
-        elif user_type == "3":
-            print("DELIVER USE CASE")
-            print("--------------------------")
-            deliverController = deliverController()
-            deliverController.setUser()
-            while (True):
+#         elif user_type == "3":
+#             print("DELIVER USE CASE")
+#             print("--------------------------")
+#             deliverController = deliverController()
+#             deliverController.setUser()
+#             while (True):
                 
-                showOrdersForDelivery(deliverController)
-                while (input("Do you want to pickup an order? (y/n): ") == "y"):
-                    order_id = input("Please enter the order ID to pickup: ")
-                    deliverController.pickupOrder(order_id)
-                    showOrdersForDelivery(deliverController)
-                while (input("Do you want to complete an order? (y/n): ") == "y"):
-                    order_id = input("Please enter the order ID to complete: ")
-                    deliverController.completeOrder(order_id)
-                    showOrdersForDelivery(deliverController)
-                print("--------------------------")
-                print()
+#                 showOrdersForDelivery(deliverController)
+#                 while (input("Do you want to pickup an order? (y/n): ") == "y"):
+#                     order_id = input("Please enter the order ID to pickup: ")
+#                     deliverController.pickupOrder(order_id)
+#                     showOrdersForDelivery(deliverController)
+#                 while (input("Do you want to complete an order? (y/n): ") == "y"):
+#                     order_id = input("Please enter the order ID to complete: ")
+#                     deliverController.completeOrder(order_id)
+#                     showOrdersForDelivery(deliverController)
+#                 print("--------------------------")
+#                 print()
 
 
 

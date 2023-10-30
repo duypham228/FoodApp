@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Restaurant</title>
+  </head>
+  <body>
+    <h1>{name}</h1>
+    <h2>Menu</h2>
+    {menu}
+    <h2>Order Now</h2>
+    <form id="inputForm">
+      <label for="itemId">Food ID:</label>
+      <input type="text" id="itemId" />
+
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" />
+
+      <button type="button" id="addItemButton">Add Item</button>
+    </form>
+    <h2>Your Orders</h2>
+    <form id="mainForm" method="POST" action="/createOrder">
+      <input type="hidden" name="restaurant_id" value="{id}" />
+      <!-- Main Form Content -->
+      <div id="appendedData"></div>
+      <input type="submit" value="Place Order" />
+    </form>
+    <script src="/static/js/customer_restaurant.js"></script>
+  </body>
+</html>

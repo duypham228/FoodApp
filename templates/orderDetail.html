@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Order Detail</title>
+  </head>
+  <body>
+    <h1>Order Detail</h1>
+    <h2>Order {order_id}</h2>
+    {order}
+    <a href="/processOrder?id={order_id}&restaurant_id={restaurant_id}"
+      >Process This Order</a
+    >
+    <a href="/completeOrder?id={order_id}&restaurant_id={restaurant_id}"
+      >Complete This Order</a
+    >
+  </body>
+</html>
