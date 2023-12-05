@@ -1,0 +1,51 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 20px;
+    background-color: #f8f8f8;
+  }
+  
+  h1 {
+    color: #333;
+  }
+  
+  h2 {
+    color: #555;
+  }
+  
+  a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Style for the header */
+  header {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px;
+  }
+  
+  /* Style for the username in the welcome message */
+  h2 span {
+    color: #007bff;
+  }
+  
+  /* Style for the restaurant and address sections */
+  section {
+    margin-bottom: 20px;
+  }
+  
+  /* Style for the links */
+  a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  

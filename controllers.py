@@ -13,6 +13,7 @@ class accountController:
         user = User(None, username, password, first_name, last_name, email, user_type)
         db.saveUser(user)
         db.close()
+        return user
     @classmethod
     def login(cls, username, password):
         db = dataAdapter(database_path)
@@ -62,6 +63,13 @@ class customerController:
         db.close()
 
     @classmethod
+    def getFoods(cls):
+        db = dataAdapter(database_path)
+        foods = db.getFoodByRestaurant(cls.restaurant.restaurant_id)
+        db.close()
+        return foods
+
+    @classmethod
     def getFoodsByRestaurant(cls, restaurant_id):
         db = dataAdapter(database_path)
         foods = db.getFoodByRestaurant(restaurant_id)
@@ -92,6 +100,13 @@ class customerController:
     def showCart(cls):
         for order_line in cls.order.order_list:
             print(f"{order_line.food_id}: {order_line.food_name} - {order_line.quantity} - ${order_line.price}")
+    
+    @classmethod
+    def getCartTotal(cls):
+        total = 0
+        for order_line in cls.order.order_list:
+            total += order_line.price * order_line.quantity
+        return total
 
     @classmethod
     def addAddress(cls, street, city, state, zip_code):
@@ -137,7 +152,7 @@ class customerController:
         for order_line in cls.order.order_list:
             cls.order.total_cost += order_line.price
         cls.order.status = "pending"
-        # cls.order.address_id = address_id
+        cls.order.address_id = address_id
         cls.order.credit_card_id = credit_card_id
 
         # Remember to update status of order after delivery
@@ -173,6 +188,19 @@ class ownerController:
         restaurant_id = db.saveRestaurant(restaurant)
         db.saveOwnership(cls.user.user_id, restaurant_id)
         db.close()
+        return restaurant
+    
+    @classmethod
+    def getRestaurantAddress(cls):
+        db = dataAdapter(database_path)
+        return db.getAddress(cls.restaurant.address_id)
+
+    @classmethod
+    def getFoods(cls):
+        db = dataAdapter(database_path)
+        foods = db.getFoodByRestaurant(cls.restaurant.restaurant_id)
+        db.close()
+        return foods
 
     @classmethod
     def addFood(cls, name, price, description):
