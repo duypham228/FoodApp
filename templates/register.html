@@ -1,33 +1,128 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register</title>
+    <!-- Add Bootstrap CSS link -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      .register-container {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: 300px;
+        text-align: center;
+      }
+
+      .register-container h1 {
+        color: #007bff;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      input[type="text"],
+      input[type="password"] {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: #ffffff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #0056b3;
+      }
+    </style>
   </head>
   <body>
-    <h1>Register</h1>
-    <form action="/register" method="POST">
-      <label for="username">Username</label>
-      <input type="text" name="username" id="username" />
-			<br>
-      <label for="password">Password</label>
-      <input type="password" name="password" id="password" />
-			<br>
-      <label for="firstname">First Name</label>
-      <input type="text" name="firstname" id="firstname" />
-			<br>
-      <label for="lastname">Last Name</label>
-      <input type="text" name="lastname" id="lastname" />
-			<br>
-      <label for="email">Email</label>
-      <input type="text" name="email" id="email" />
-			<br>
-      <label for="usertype">User Type (Customer, Owner, Deliver)</label>
-      <select name="usertype" id="usertype">
-        <option value="customer">Customer</option>
-        <option value="owner">Owner</option>
-        <option value="deliver">Deliver</option>
-			</select>
-			<br>
-      <input type="submit" value="Register" />
+    <div class="register-container">
+      <h1>Register</h1>
+      <form action="/register" method="POST">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" name="username" id="username" required />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" name="password" id="password" required />
+        </div>
+        <div class="form-group">
+          <label for="firstname">First Name</label>
+          <input type="text" name="firstname" id="firstname" required />
+        </div>
+        <div class="form-group">
+          <label for="lastname">Last Name</label>
+          <input type="text" name="lastname" id="lastname" required />
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="text" name="email" id="email" required />
+        </div>
+        <div class="form-group">
+          <label for="usertype">User Type (Customer, Owner, Deliver)</label>
+          <select name="usertype" id="usertype" required>
+            <option value="customer">Customer</option>
+            <option value="owner">Owner</option>
+            <option value="deliver">Deliver</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <input type="submit" value="Register" />
+        </div>
+      </form>
+    </div>
+
+    <!-- Add Bootstrap JS and Popper.js scripts (needed for Bootstrap functionality) -->
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"
+      integrity="sha384-eMNv1NH5u6HFnL+jJFfi4G8r6fr3p9DnDGmXFCXBkyw7XEg6cKZpR/6C5PVvW00c"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>

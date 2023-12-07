@@ -19,6 +19,7 @@ class Request:
         self.content_length = int(self.headers.get('content-length', 0))
         self.body = request.rfile.read(self.content_length).decode('utf-8')
         self.session_manager = session_manager
+        
         try:
             self.json = urlparse.parse_qs(self.body)
         except json.decoder.JSONDecodeError: 

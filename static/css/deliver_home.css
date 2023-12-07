@@ -1,0 +1,46 @@
+body {
+  background-color: #f8f9fa;
+  padding: 20px;
+}
+
+h1,
+h2,
+h3 {
+  color: #007bff;
+}
+
+.order-container {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.order-section {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  padding: 15px;
+}
+
+.order-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.order-item {
+  margin-bottom: 10px;
+}
+
+.order-status-ready {
+  color: #28a745;
+}
+
+.order-status-delivering {
+  color: #007bff;
+}
+
+.order-status-delivered {
+  color: #6c757d;
+}

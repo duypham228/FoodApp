@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Food App</title>
+    <title>Home</title>
     <!-- Add Bootstrap CSS link -->
     <link
       rel="stylesheet"
@@ -11,30 +11,23 @@
       integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
       crossorigin="anonymous"
     />
-    <style>
-      body {
-        background-color: #f8f9fa;
-      }
-
-      .container-box {
-        background-color: #ffffff;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-        margin-top: 50px;
-      }
-    </style>
+    <link rel="stylesheet" href="/static/css/owner_home.css" />
   </head>
-  <body class="container">
-    <div class="container-box">
-      <h1 class="text-center">Food App</h1>
-      <div class="text-center mt-3">
-        <a class="btn btn-primary btn-lg" href="/login" role="button"
-          >Login Now</a
-        >
-        <br />
-        <a class="btn btn-success btn-lg mt-3" href="/register" role="button"
-          >Register Now</a
+  <body>
+    <div class="container dashboard-container">
+      <h1 class="mt-4">Dashboard</h1>
+      <h2 class="mt-4">Welcome, {username}!</h2>
+
+      <div class="mt-4 restaurant-list-container">
+        <h2>Your Restaurants</h2>
+        <ul class="restaurant-list">
+          {custom}
+        </ul>
+      </div>
+
+      <div class="mt-4">
+        <a href="/addRestaurant" class="btn btn-secondary"
+          >Register More Restaurants</a
         >
       </div>
     </div>

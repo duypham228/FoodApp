@@ -1,0 +1,35 @@
+body {
+  background-color: #f8f9fa;
+  padding: 20px;
+}
+
+h1,
+h2 {
+  color: #007bff;
+}
+
+.form-container {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.order-details,
+.payment-details,
+.address-details {
+  margin-top: 20px;
+}
+
+.order-item {
+  margin-bottom: 10px;
+}
+
+.hidden-input {
+  display: none;
+}
+
+.checkout-btn {
+  margin-top: 20px;
+}

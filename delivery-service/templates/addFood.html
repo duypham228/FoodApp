@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Food</title>
+    <!-- Add Bootstrap CSS link -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/static/css/addFood.css" />
+  </head>
+  <body>
+    <div class="container form-container">
+      <h1 class="mt-4">Add New Food</h1>
+
+      <div class="form-group">
+        <h2>Food Information</h2>
+        <form action="/addFood" method="POST">
+          <div class="form-group">
+            <label for="name">Food Name</label>
+            <input
+              type="text"
+              name="name"
+              id="name"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="price">Price</label>
+            <input
+              type="number"
+              step="any"
+              name="price"
+              id="price"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="description">Description</label>
+            <input
+              type="text"
+              name="description"
+              id="description"
+              class="form-control"
+            />
+          </div>
+
+          <input type="hidden" name="id" id="id" value="{id}" />
+
+          <div class="form-group">
+            <input type="submit" value="Add New Food" class="btn btn-primary" />
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Add Bootstrap JS and Popper.js scripts (needed for Bootstrap functionality) -->
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"
+      integrity="sha384-eMNv1NH5u6HFnL+jJFfi4G8r6fr3p9DnDGmXFCXBkyw7XEg6cKZpR/6C5PVvW00c"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
